@@ -1,11 +1,4 @@
-import {
-  StyleSheet,
-  Text,
-  SafeAreaView,
-  FlatList,
-  View,
-  Image,
-} from "react-native";
+import { StyleSheet, Text, SafeAreaView, FlatList } from "react-native";
 import { useState, useEffect } from "react";
 import { ResponseType, useAuthRequest } from "expo-auth-session";
 import { myTopTracks, albumTracks } from "./utils/apiOptions";
@@ -40,43 +33,44 @@ export default function App() {
     if (response?.type === "success") {
       const { access_token } = response.params;
       setToken(access_token);
+      console.log('token set');
     } else {
+      console.log('token not set');
     }
   }, [response]);
 
   useEffect(() => {
+    console.log('starting');
     if (token) {
       // TODO: Select which option you want: Top Tracks or Album Tracks
 
       // Comment out the one you are not using
       // myTopTracks(setTracks, token);
       albumTracks(ALBUM_ID, setTracks, token);
+      console.log('working');
     }
   }, [token]);
 
   let contentDisplayed = null;
-  if (token) {
-    contentDisplayed = (
-      <View style={styles.parentContainer}>
-        <View style={styles.headerContainer}>
-          <Image
-            style={{ width: 30, height: 30 }}
-            source={require("./assets/spotify-logo.png")}
-          ></Image>
-          <Text style={styles.headerText}>My Spotify Tracks</Text>
-        </View>
-        <FlatList
-          data={tracks}
-          renderItem={SongTile}
-          keyExtractor={(item, index) => item["id"]}
-        />
-      </View>
-    );
-  } else {
-    contentDisplayed = (
-      <ConnectButton promptAsync={promptAsync}></ConnectButton>
-    );
-  }
+  // if (token) {
+  //   contentDisplayed = <FlatList data={tracks} renderItem={SongTile} keyExtractor={(item, index) => item['id']}/>;
+  //   // contentDisplayed = <Text>Test</Text>
+  //   console.log('list');
+  //   console.log(tracks);
+  // } else {
+  //   contentDisplayed = (
+  //     <ConnectButton promptAsync={promptAsync}></ConnectButton>
+  //   );
+  //   console.log('button');
+  // }
+
+  contentDisplayed = <FlatList data={[{
+    album: {
+      images: ['https://i.scdn.co/image/ab67616d000048514ab2520c2c77a1d66b9ee21d', 'https://i.scdn.co/image/ab67616d000048514ab2520c2c77a1d66b9ee21d', 'https://i.scdn.co/image/ab67616d000048514ab2520c2c77a1d66b9ee21d']
+    },
+    name: 'Post',
+    artists: {}
+  }]} renderItem={SongTile} keyExtractor={(item, index) => item['id']}/>;
 
   return (
     <SafeAreaView style={styles.container}>{contentDisplayed}</SafeAreaView>
@@ -89,18 +83,5 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     flex: 1,
-  },
-  headerText: {
-    color: "white",
-    fontSize: 30,
-  },
-  headerContainer: {
-    flexDirection: "row",
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  parentContainer: {
-    flexDirection: "column",
-    justifyContent: "center",
   },
 });

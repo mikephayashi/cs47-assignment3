@@ -1,11 +1,4 @@
-import {
-  StyleSheet,
-  Text,
-  SafeAreaView,
-  FlatList,
-  View,
-  Image,
-} from "react-native";
+import { StyleSheet, Text, SafeAreaView } from "react-native";
 import { useState, useEffect } from "react";
 import { ResponseType, useAuthRequest } from "expo-auth-session";
 import { myTopTracks, albumTracks } from "./utils/apiOptions";
@@ -13,6 +6,7 @@ import { REDIRECT_URI, SCOPES, CLIENT_ID, ALBUM_ID } from "./utils/constants";
 import colors from "./Themes/colors.js";
 import ConnectButton from "./components/ConnectButton";
 import SongTile from "./components/SongTile";
+import { FlatList } from "react-native-web";
 
 // Endpoints for authorizing with Spotify
 const discovery = {
@@ -37,10 +31,13 @@ export default function App() {
   );
 
   useEffect(() => {
+    console.log('test');
+  });
+
+  useEffect(() => {
     if (response?.type === "success") {
       const { access_token } = response.params;
       setToken(access_token);
-    } else {
     }
   }, [response]);
 
@@ -56,22 +53,7 @@ export default function App() {
 
   let contentDisplayed = null;
   if (token) {
-    contentDisplayed = (
-      <View style={styles.parentContainer}>
-        <View style={styles.headerContainer}>
-          <Image
-            style={{ width: 30, height: 30 }}
-            source={require("./assets/spotify-logo.png")}
-          ></Image>
-          <Text style={styles.headerText}>My Spotify Tracks</Text>
-        </View>
-        <FlatList
-          data={tracks}
-          renderItem={SongTile}
-          keyExtractor={(item, index) => item["id"]}
-        />
-      </View>
-    );
+    contentDisplayed = <FlatList data={tracks} renderItem={SongTile} />;
   } else {
     contentDisplayed = (
       <ConnectButton promptAsync={promptAsync}></ConnectButton>
@@ -89,18 +71,5 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     flex: 1,
-  },
-  headerText: {
-    color: "white",
-    fontSize: 30,
-  },
-  headerContainer: {
-    flexDirection: "row",
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  parentContainer: {
-    flexDirection: "column",
-    justifyContent: "center",
   },
 });

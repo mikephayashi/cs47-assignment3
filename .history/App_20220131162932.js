@@ -55,28 +55,34 @@ export default function App() {
   }, [token]);
 
   let contentDisplayed = null;
-  if (token) {
-    contentDisplayed = (
-      <View style={styles.parentContainer}>
-        <View style={styles.headerContainer}>
-          <Image
-            style={{ width: 30, height: 30 }}
-            source={require("./assets/spotify-logo.png")}
-          ></Image>
-          <Text style={styles.headerText}>My Spotify Tracks</Text>
-        </View>
-        <FlatList
-          data={tracks}
-          renderItem={SongTile}
-          keyExtractor={(item, index) => item["id"]}
-        />
+  // if (token) {
+  //   contentDisplayed = <FlatList data={tracks} renderItem={SongTile} keyExtractor={(item, index) => item['id']}/>;
+  //   // contentDisplayed = <Text>Test</Text>
+  //   console.log('list');
+  //   console.log(tracks);
+  // } else {
+  //   contentDisplayed = (
+  //     <ConnectButton promptAsync={promptAsync}></ConnectButton>
+  //   );
+  //   console.log('button');
+  // }
+
+  contentDisplayed = (
+    <View style={styles.parentContainer}>
+      <View style={styles.headerContainer}>
+        <Image
+          style={{ width: 30, height: 30 }}
+          source={require("./assets/spotify-logo.png")}
+        ></Image>
+        <Text style={styles.headerText}>My Spotify Tracks</Text>
       </View>
-    );
-  } else {
-    contentDisplayed = (
-      <ConnectButton promptAsync={promptAsync}></ConnectButton>
-    );
-  }
+      <FlatList
+        data={tracks}
+        renderItem={SongTile}
+        keyExtractor={(item, index) => item["id"]}
+      />
+    </View>
+  );
 
   return (
     <SafeAreaView style={styles.container}>{contentDisplayed}</SafeAreaView>
@@ -91,16 +97,16 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   headerText: {
-    color: "white",
+    color: 'white',
     fontSize: 30,
   },
   headerContainer: {
-    flexDirection: "row",
-    justifyContent: "center",
-    alignItems: "center",
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   parentContainer: {
-    flexDirection: "column",
-    justifyContent: "center",
-  },
+    flexDirection: 'column',
+    justifyContent: 'center',
+  }
 });
