@@ -1,10 +1,25 @@
-import { View, Text, Image } from "react-native";
+import { View, Text, Image, Pressable } from "react-native";
 import millisToMinutesAndSeconds from "../utils/millisToMinuteSeconds";
+import { AntDesign } from "@expo/vector-icons";
 
-const SongTile = ({ item, index }) => {
+const SongTile = ({ item, navigation }) => {
+
+  const pushPreviewScreen = (e) => {
+    e.stopPropagation();
+    console.log(item);
+    navigation.navigate('Preview', {url:item.preview_url});
+  }
+
+  const pushDetailsScreen = (e) => {
+    navigation.navigate('Detailed', {url:item.external_urls.spotify});
+  }
+
   return (
-    <View style={styles.flex}>
-      <Text style={styles.text}>{index}</Text>
+    <Pressable onPress={pushDetailsScreen}>
+      <View style={styles.flex}>
+      <Pressable onPress={pushPreviewScreen}>
+        <AntDesign name="play" size={24} color="green" />
+      </Pressable>
       <Image
         style={styles.icon}
         source={{ uri: item.album.images[0].url ?? "" }}
@@ -18,6 +33,8 @@ const SongTile = ({ item, index }) => {
         {millisToMinutesAndSeconds(item.duration_ms)}
       </Text>
     </View>
+    </Pressable>
+    
   );
 };
 
